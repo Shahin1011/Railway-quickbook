@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bangladesh Railway E-Ticket Mock Test Sandbox – Railway QuickBook</title>
+  <style>
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      margin: 0;
+      padding: 24px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    h1 {
+      color: #065f46;
+      margin: 0 0 6px 0;
+      font-size: 22px;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      color: #334155;
+    }
+    input, select {
+      width: 100%;
+      padding: 9px 10px;
+      border: 1px solid #94a3b8;
+      border-radius: 6px;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+    .railway-ticket-search-submit-btn {
+      background: #006a4e;
+      color: #fff;
+      border: none;
+      padding: 10px 22px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .single-trip-wrapper {
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+      background: #fff;
+    }
+    .seat-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .single-seat-class {
+      border: 1px solid #94a3b8;
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: #f8fafc;
+      min-width: 130px;
+    }
+    .book-now-btn {
+      margin-top: 6px;
+      background: #059669;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    #searchLog {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #047857;
+      font-weight: 600;
+    }
+  </style>
+  <link rel="stylesheet" href="../content/content.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- 1. Mock Search Form (matches eticket.railway.gov.bd selectors) -->
+    <div class="card">
+      <h1>🧪 Railway QuickBook – লোকাল টেস্ট পেজ (Mock eticket.railway.gov.bd)</h1>
+      <p style="margin-top:0; font-size: 13px; color:#475569;">
+        ডানপাশের নিচে <b>QuickBook ভাসমান প্যানেল</b> থেকে <b>🔍 Fill & Search</b> বাটনে ক্লিক করুন অথবা <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd> চাপুন।
+      </p>
+
+      <form id="mockSearchForm" onsubmit="event.preventDefault(); document.getElementById('searchLog').textContent = '✅ Search Triggered: ' + dest_from.value + ' ➔ ' + dest_to.value + ' | Date: ' + doj.value + ' | Class: ' + choose_class.value;">
+        <div class="grid-4">
+          <div>
+            <label for="dest_from">From Station</label>
+            <input type="text" id="dest_from" name="dest_from" placeholder="From Station" />
+          </div>
+          <div>
+            <label for="dest_to">To Station</label>
+            <input type="text" id="dest_to" name="dest_to" placeholder="To Station" />
+          </div>
+          <div>
+            <label for="doj">Date of Journey</label>
+            <input type="text" id="doj" name="doj" placeholder="Pick a date" />
+          </div>
+          <div>
+            <label for="choose_class">Choose a Class</label>
+            <select id="choose_class" name="choose_class">
+              <option value="">Choose a Class</option>
+              <option value="S_CHAIR">S_CHAIR</option>
+              <option value="SNIGDHA">SNIGDHA</option>
+              <option value="AC_S">AC_S</option>
+              <option value="AC_B">AC_B</option>
+              <option value="F_BERTH">F_BERTH</option>
+              <option value="SHOVAN">SHOVAN</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="railway-ticket-search-submit-btn">Search Trains</button>
+        <div id="searchLog"></div>
+      </form>
+    </div>
+
+    <!-- 2. Mock Train Search Results -->
+    <div class="card">
+      <h2 style="margin-top:0; font-size: 17px;">🚆 Mock Train Search Results (Preferred Train Highlighting Test)</h2>
+
+      <div class="single-trip-wrapper">
+        <h3>PARJOTAK EXPRESS (816) — 06:15 AM</h3>
+        <div class="seat-row">
+          <div class="single-seat-class">
+            <div><b>S_CHAIR</b> — ৳754 (32 Tickets)</div>
+            <button type="button" class="book-now-btn">Book Now</button>
+          </div>
+          <div class="single-seat-class">
+            <div><b>SNIGDHA</b> — ৳1443 (12 Tickets)</div>
+            <button type="button" class="book-now-btn">Book Now</button>
+          </div>
+          <div class="single-seat-class">
+            <div><b>AC_S</b> — ৳1728 (8 Tickets)</div>
+            <button type="button" class="book-now-btn">Book Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="single-trip-wrapper">
+        <h3>MOHANAGAR EXPRESS (722) — 08:30 PM</h3>
+        <div class="seat-row">
+          <div class="single-seat-class">
+            <div><b>S_CHAIR</b> — ৳685 (2 Tickets)</div>
+            <button type="button" class="book-now-btn">Book Now</button>
+          </div>
+          <div class="single-seat-class">
+            <div><b>SNIGDHA</b> — ৳1311 (0 Tickets)</div>
+            <button type="button" class="book-now-btn">Book Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="single-trip-wrapper">
+        <h3>COXS BAZAR EXPRESS (814) — 11:00 PM</h3>
+        <div class="seat-row">
+          <div class="single-seat-class">
+            <div><b>S_CHAIR</b> — ৳754 (2 Tickets)</div>
+            <button type="button" class="book-now-btn">Book Now</button>
+          </div>
+          <div class="single-seat-class">
+            <div><b>SNIGDHA</b> — ৳1443 (0 Tickets)</div>
+            <button type="button" class="book-now-btn">Book Now</button>
+          </div>
+          <div class="single-seat-class">
+            <div><b>AC_B</b> — ৳2644 (0 Tickets)</div>
+            <button type="button" class="book-now-btn">Book Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="single-trip-wrapper">
+        <h3>SUBORNO EXPRESS (702) — 04:30 PM</h3>
+        <div class="seat-row">
+          <div class="single-seat-class">
+            <div><b>S_CHAIR</b> — ৳450 (82 Tickets)</div>
+            <button type="button" class="book-now-btn">Book Now</button>
+          </div>
+          <div class="single-seat-class">
+            <div><b>SNIGDHA</b> — ৳855 (30 Tickets)</div>
+            <button type="button" class="book-now-btn">Book Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="single-trip-wrapper">
+        <h3>SONAR BANGLA EXPRESS (788) — 07:00 AM</h3>
+        <div class="seat-row">
+          <div class="single-seat-class">
+            <div><b>S_CHAIR</b> — ৳450 (64 Tickets)</div>
+            <button type="button" class="book-now-btn">Book Now</button>
+          </div>
+          <div class="single-seat-class">
+            <div><b>AC_S</b> — ৳1025 (10 Tickets)</div>
+            <button type="button" class="book-now-btn">Book Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Mock Coach Seat Selection Layout (Matches Bangladesh Railway Layout) -->
+    <div class="card" id="mockSeatLayoutCard" style="display: block;">
+      <h2 style="margin-top:0; font-size: 17px;">💺 Mock Coach Seat Layout (Coach: NEO)</h2>
+      <p style="font-size: 12px; color: #64748b; margin-top: 4px;">
+        বগি ম্যাপে ফাঁকা সিট (White) থাকলে এক্সটেনশন স্বয়ংক্রিয়ভাবে পছন্দের নিয়ম অনুযায়ী সিট সিলেক্ট করবে।
+      </p>
+
+      <!-- Coach Selection Tabs -->
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+        <span style="font-size: 12px; font-weight: 700; color: #475569;">বগি / কোচ:</span>
+        <button type="button" class="coach-tab active" style="padding: 5px 12px; border-radius: 6px; border: 1.5px solid #006a4e; background: #006a4e; color: #fff; font-weight: 700; font-size: 12px; cursor: pointer;">NEO</button>
+        <button type="button" class="coach-tab" style="padding: 5px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; color: #334155; font-weight: 700; font-size: 12px; cursor: pointer;">THA</button>
+        <button type="button" class="coach-tab" style="padding: 5px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; color: #334155; font-weight: 700; font-size: 12px; cursor: pointer;">KHA</button>
+      </div>
+
+      <!-- Legend -->
+      <div style="display: flex; gap: 15px; font-size: 11.5px; margin-bottom: 12px; font-weight: 600;">
+        <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 14px; height: 14px; border: 1px solid #cbd5e1; background: #fff; border-radius: 3px;"></span> Available</span>
+        <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 14px; height: 14px; background: #1e3a8a; border-radius: 3px;"></span> Selected</span>
+        <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 14px; height: 14px; background: #16a34a; border-radius: 3px;"></span> In Progress</span>
+        <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 14px; height: 14px; background: #ea580c; border-radius: 3px;"></span> Booked</span>
+      </div>
+
+      <div style="width: 290px; margin: 0 auto; padding: 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; display: flex; flex-direction: column; gap: 8px;">
+        <!-- Row 0 -->
+        <div style="display: flex; justify-content: flex-end;">
+          <button type="button" class="seat-btn booked" style="width: 52px; height: 36px; border-radius: 8px; border: 1px solid #ea580c; background: #ea580c; color: #fff; font-weight: 700; font-size: 11px;">NEO-1</button>
+        </div>
+        <!-- Row 1 -->
+        <div style="display: flex; justify-content: space-between;">
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="seat-btn booked" style="width: 52px; height: 36px; border-radius: 8px; border: 1px solid #ea580c; background: #ea580c; color: #fff; font-weight: 700; font-size: 11px;">NEO-4</button>
+            <button type="button" class="seat-btn booked" style="width: 52px; height: 36px; border-radius: 8px; border: 1px solid #ea580c; background: #ea580c; color: #fff; font-weight: 700; font-size: 11px;">NEO-3</button>
+          </div>
+          <button type="button" class="seat-btn booked" style="width: 52px; height: 36px; border-radius: 8px; border: 1px solid #ea580c; background: #ea580c; color: #fff; font-weight: 700; font-size: 11px;">NEO-2</button>
+        </div>
+        <!-- Row 2 -->
+        <div style="display: flex; justify-content: space-between;">
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="seat-btn available" style="width: 52px; height: 36px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; color: #0f172a; font-weight: 700; font-size: 11px; cursor: pointer;">NEO-8</button>
+            <button type="button" class="seat-btn available" style="width: 52px; height: 36px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; color: #0f172a; font-weight: 700; font-size: 11px; cursor: pointer;">NEO-7</button>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="seat-btn booked" style="width: 52px; height: 36px; border-radius: 8px; border: 1px solid #ea580c; background: #ea580c; color: #fff; font-weight: 700; font-size: 11px;">NEO-6</button>
+            <button type="button" class="seat-btn booked" style="width: 52px; height: 36px; border-radius: 8px; border: 1px solid #ea580c; background: #ea580c; color: #fff; font-weight: 700; font-size: 11px;">NEO-5</button>
+          </div>
+        </div>
+        <!-- Row 3 -->
+        <div style="display: flex; justify-content: space-between;">
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="seat-btn available" style="width: 52px; height: 36px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; color: #0f172a; font-weight: 700; font-size: 11px; cursor: pointer;">NEO-12</button>
+            <button type="button" class="seat-btn available" style="width: 52px; height: 36px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; color: #0f172a; font-weight: 700; font-size: 11px; cursor: pointer;">NEO-11</button>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="seat-btn booked" style="width: 52px; height: 36px; border-radius: 8px; border: 1px solid #ea580c; background: #ea580c; color: #fff; font-weight: 700; font-size: 11px;">NEO-10</button>
+            <button type="button" class="seat-btn booked" style="width: 52px; height: 36px; border-radius: 8px; border: 1px solid #ea580c; background: #ea580c; color: #fff; font-weight: 700; font-size: 11px;">NEO-9</button>
+          </div>
+        </div>
+        <!-- Row 4 -->
+        <div style="display: flex; justify-content: space-between;">
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="seat-btn available" style="width: 52px; height: 36px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; color: #0f172a; font-weight: 700; font-size: 11px; cursor: pointer;">NEO-16</button>
+            <button type="button" class="seat-btn available" style="width: 52px; height: 36px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; color: #0f172a; font-weight: 700; font-size: 11px; cursor: pointer;">NEO-15</button>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="seat-btn booked" style="width: 52px; height: 36px; border-radius: 8px; border: 1px solid #ea580c; background: #ea580c; color: #fff; font-weight: 700; font-size: 11px;">NEO-14</button>
+            <button type="button" class="seat-btn booked" style="width: 52px; height: 36px; border-radius: 8px; border: 1px solid #ea580c; background: #ea580c; color: #fff; font-weight: 700; font-size: 11px;">NEO-13</button>
+          </div>
+        </div>
+      </div>
+      <div id="selectedSeatsLog" style="margin-top: 10px; font-size: 13px; font-weight: 700; color: #059669; text-align: center;"></div>
+    </div>
+
+    <!-- 4. Mock Passenger Details Form -->
+    <div class="card">
+      <h2 style="margin-top:0; font-size: 17px;">👥 Mock Passenger Details (Co-Passenger Autofill Test)</h2>
+      <div class="grid-4">
+        <div>
+          <label>Passenger 1 (Primary)</label>
+          <input type="text" name="passenger_name_1" value="ACCOUNT HOLDER" readonly />
+        </div>
+        <div>
+          <label>Passenger 2 Name</label>
+          <input type="text" name="passenger_name_2" placeholder="Full Name" />
+        </div>
+        <div>
+          <label>Passenger 3 Name</label>
+          <input type="text" name="passenger_name_3" placeholder="Full Name" />
+        </div>
+        <div>
+          <label>Passenger 4 Name</label>
+          <input type="text" name="passenger_name_4" placeholder="Full Name" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../utils/i18n.js"></script>
+  <script src="../utils/stations-data.js"></script>
+  <script src="../content/content.js"></script>
+  <script>
+    document.querySelectorAll(".seat-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (btn.classList.contains("booked")) return;
+        btn.classList.toggle("selected");
+        const selected = Array.from(document.querySelectorAll(".seat-btn.selected")).map((b) => b.textContent.trim());
+        const logEl = document.getElementById("selectedSeatsLog");
+        if (logEl) logEl.textContent = selected.length > 0 ? "✅ Selected Seats: " + selected.join(", ") : "";
+      });
+    });
+  </script>
+</body>
+</html>

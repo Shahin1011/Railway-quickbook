@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Railway QuickBook – BD Railway Assistant</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Header & Live BST Clock -->
+    <header class="app-header">
+      <div class="brand-row">
+        <div class="brand-logo">
+          <span class="train-icon">🚆</span>
+          <div>
+            <h1 data-i18n="appTitle">Railway QuickBook</h1>
+            <p class="subtitle" data-i18n="appSubtitle">BD E-Ticket Smart Assistant</p>
+          </div>
+        </div>
+        <div class="header-right-actions">
+          <div class="lang-switch-group" data-i18n-title="langTitle" title="Language / ভাষা">
+            <button type="button" class="lang-btn active" data-lang="en">EN</button>
+            <button type="button" class="lang-btn" data-lang="bn">বাংলা</button>
+          </div>
+          <label class="master-switch" data-i18n-title="masterToggleTitle" title="QuickBook On/Off">
+            <input type="checkbox" id="masterToggle" checked />
+            <span class="slider"></span>
+            <span class="switch-label" id="masterToggleLabel">ON</span>
+          </label>
+          <div class="clock-badge" data-i18n-title="clockTitle" title="Bangladesh Standard Time (BST)">
+            <div class="bst-time" id="bstClock">--:--:--</div>
+            <div class="countdown-text" id="releaseCountdown">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="tab-nav">
+        <button class="tab-btn active" data-tab="tab-journey">
+          <span>📍</span> <span data-i18n="tabJourney">Journey</span>
+        </button>
+        <button class="tab-btn" data-tab="tab-trains">
+          <span>⭐</span> <span data-i18n="tabTrains">Trains & Pax</span>
+          <span class="badge-count" id="trainCountBadge">3</span>
+        </button>
+        <button class="tab-btn" data-tab="tab-presets">
+          <span>🔖</span> <span data-i18n="tabPresets">Presets & Settings</span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Main Scrollable Content -->
+    <main class="tab-content-wrapper">
+      <!-- TAB 1: JOURNEY SETUP -->
+      <section class="tab-pane active" id="tab-journey">
+        <!-- Route Summary Banner -->
+        <div class="route-preview-card">
+          <div class="route-endpoints">
+            <span class="station-pill" id="previewFrom">Dhaka</span>
+            <span class="route-arrow">➔</span>
+            <span class="station-pill" id="previewTo">Chattogram</span>
+          </div>
+          <div class="route-meta">
+            <span id="previewDate">--</span> • <span id="previewClass">S_CHAIR</span> • <span id="previewZone" class="zone-tag">East Zone (8:00 AM)</span>
+          </div>
+        </div>
+
+        <!-- Station Selection -->
+        <div class="form-card">
+          <div class="station-grid">
+            <div class="form-group">
+              <label for="fromStation" data-i18n="fromLabel">From Station</label>
+              <input
+                type="text"
+                id="fromStation"
+                list="stationList"
+                data-i18n-placeholder="fromPlaceholder"
+                placeholder="e.g. Dhaka"
+                autocomplete="off"
+              />
+            </div>
+
+            <button type="button" id="swapStationsBtn" class="swap-btn" data-i18n-title="swapTitle" title="Swap Stations (⇄)">
+              ⇄
+            </button>
+
+            <div class="form-group">
+              <label for="toStation" data-i18n="toLabel">To Station</label>
+              <input
+                type="text"
+                id="toStation"
+                list="stationList"
+                data-i18n-placeholder="toPlaceholder"
+                placeholder="e.g. Chattogram"
+                autocomplete="off"
+              />
+            </div>
+          </div>
+
+          <datalist id="stationList"></datalist>
+
+          <!-- Popular Quick Station Chips -->
+          <div class="quick-chips-row">
+            <span class="chip-label" data-i18n="quickDestLabel">Quick To:</span>
+            <button type="button" class="station-chip" data-to="Chattogram">Chattogram</button>
+            <button type="button" class="station-chip" data-to="Cox's Bazar">Cox's Bazar</button>
+            <button type="button" class="station-chip" data-to="Sylhet">Sylhet</button>
+            <button type="button" class="station-chip" data-to="Rajshahi">Rajshahi</button>
+            <button type="button" class="station-chip" data-to="Khulna">Khulna</button>
+            <button type="button" class="station-chip" data-to="Rangpur">Rangpur</button>
+          </div>
+        </div>
+
+        <!-- Journey Date & Advance Ticket Calculator -->
+        <div class="form-card">
+          <div class="form-group">
+            <div class="label-row">
+              <label for="journeyDate" data-i18n="journeyDateLabel">Journey Date</label>
+              <span class="date-formatted-hint" id="formattedDateHint"></span>
+            </div>
+            <input type="date" id="journeyDate" />
+          </div>
+
+          <div class="quick-date-row">
+            <button type="button" class="date-chip" data-offset="0" data-i18n="todayBtn">Today</button>
+            <button type="button" class="date-chip" data-offset="1" data-i18n="tomorrowBtn">Tomorrow</button>
+            <button type="button" class="date-chip highlight-chip" data-offset="9" data-i18n="day10Btn" data-i18n-title="day10Tooltip" title="10th day advance ticket counting today as day 1">
+              🎯 10th Day (+9d)
+            </button>
+            <button type="button" class="date-chip highlight-chip" data-offset="10" data-i18n="day10AltBtn" data-i18n-title="day10AltTooltip" title="Advance ticket for 10 days from today">
+              🎯 +10 Days (+10d)
+            </button>
+          </div>
+        </div>
+
+        <!-- Seat Class & Passenger Count -->
+        <div class="form-card">
+          <div class="two-col-grid">
+            <div class="form-group">
+              <label for="seatClass" data-i18n="seatClassLabel">Seat Class</label>
+              <select id="seatClass"></select>
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="passengersLabel">Passengers (Max 4)</label>
+              <div class="passenger-counter-row">
+                <div class="mini-counter">
+                  <span data-i18n="adultLabel">Adult</span>
+                  <select id="adultCount">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                  </select>
+                </div>
+                <div class="mini-counter">
+                  <span data-i18n="childLabel">Child</span>
+                  <select id="childCount">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Automation Checkboxes -->
+          <div class="toggles-group">
+            <label class="checkbox-row">
+              <input type="checkbox" id="autoSubmitSearch" />
+              <span data-i18n="autoSubmitOption">Automatically click <b>Search Trains</b> after Autofill</span>
+            </label>
+            <label class="checkbox-row">
+              <input type="checkbox" id="autoExpandPreferredClass" />
+              <span data-i18n="autoExpandOption">Auto-expand preferred class <b>Book Now</b> once</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: PREFERRED TRAINS & PASSENGERS -->
+      <section class="tab-pane" id="tab-trains">
+        <!-- Preferred Trains Card -->
+        <div class="form-card">
+          <div class="section-header-row">
+            <div>
+              <h3 data-i18n="preferredTrainsHeading">⭐ Preferred Trains (Priority Order)</h3>
+              <p class="section-desc" data-i18n="preferredTrainsDesc">Highlighted in green on search results; auto-scrolls to #1 match.</p>
+            </div>
+          </div>
+
+          <!-- Add Train Input -->
+          <div class="add-train-row">
+            <input
+              type="text"
+              id="trainInput"
+              list="popularTrainList"
+              data-i18n-placeholder="trainInputPlaceholder"
+              placeholder="Train Name or Number (e.g. SUBORNO EXPRESS or 702)"
+              autocomplete="off"
+            />
+            <button type="button" id="addTrainBtn" class="btn-secondary" data-i18n="addTrainBtn">+ Add Train</button>
+          </div>
+          <datalist id="popularTrainList"></datalist>
+
+          <!-- Route Suggested Trains -->
+          <div class="route-train-suggestions" id="routeSuggestionsBox">
+            <span class="chip-label" data-i18n="routeSuggestedLabel">Popular on this route (click to add):</span>
+            <div class="suggestion-chips" id="routeTrainChips"></div>
+          </div>
+
+          <!-- Selected Preferred Trains List -->
+          <ul class="preferred-train-list" id="preferredTrainList"></ul>
+        </div>
+
+        <!-- Co-Passenger Names for Fast Checkout -->
+        <div class="form-card">
+          <h3 data-i18n="coPaxHeading">👥 Co-Passengers (Checkout Autofill)</h3>
+          <p class="section-desc" data-i18n="coPaxDesc">Passenger 1 is loaded from your profile. Pre-save Passenger 2, 3 & 4 names:</p>
+
+          <div class="co-passenger-list">
+            <div class="co-passenger-row">
+              <span class="pax-badge" data-i18n="paxBadge2">Pax 2</span>
+              <input type="text" id="paxName1" data-i18n-placeholder="paxPlaceholder" placeholder="Full Name (in English as on NID/Passport)" />
+              <select id="paxType1">
+                <option value="Adult">Adult</option>
+                <option value="Child">Child</option>
+              </select>
+            </div>
+            <div class="co-passenger-row">
+              <span class="pax-badge" data-i18n="paxBadge3">Pax 3</span>
+              <input type="text" id="paxName2" data-i18n-placeholder="paxPlaceholder" placeholder="Full Name (in English as on NID/Passport)" />
+              <select id="paxType2">
+                <option value="Adult">Adult</option>
+                <option value="Child">Child</option>
+              </select>
+            </div>
+            <div class="co-passenger-row">
+              <span class="pax-badge" data-i18n="paxBadge4">Pax 4</span>
+              <input type="text" id="paxName3" data-i18n-placeholder="paxPlaceholder" placeholder="Full Name (in English as on NID/Passport)" />
+              <select id="paxType3">
+                <option value="Adult">Adult</option>
+                <option value="Child">Child</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: PRESETS & SETTINGS -->
+      <section class="tab-pane" id="tab-presets">
+        <!-- Saved Route Presets -->
+        <div class="form-card">
+          <h3 data-i18n="presetsHeading">🔖 Route Presets (One-Click Setup)</h3>
+          <p class="section-desc" data-i18n="presetsDesc">Click any preset to load stations, class, and preferred trains instantly.</p>
+
+          <div class="save-preset-row">
+            <input type="text" id="newPresetTitle" data-i18n-placeholder="presetTitlePlaceholder" placeholder="Preset title (e.g. Vacation Home Trip)" />
+            <button type="button" id="savePresetBtn" class="btn-secondary" data-i18n="savePresetBtn">+ Save Preset</button>
+          </div>
+
+          <div class="preset-list" id="presetList"></div>
+        </div>
+
+        <!-- Display & Alarm Options -->
+        <div class="form-card">
+          <h3 data-i18n="settingsHeading">⚙️ Preferences & Notifications</h3>
+          <div class="toggles-group">
+            <label class="checkbox-row">
+              <input type="checkbox" id="showFloatingWidget" />
+              <span data-i18n="showFloatingWidgetOption">Show on-page floating <b>QuickBook assistant</b></span>
+            </label>
+            <label class="checkbox-row">
+              <input type="checkbox" id="autoHighlightTrains" />
+              <span data-i18n="autoHighlightTrainsOption"><b>Auto-highlight</b> preferred trains in results</span>
+            </label>
+            <label class="checkbox-row">
+              <input type="checkbox" id="autoScrollToPreferred" />
+              <span data-i18n="autoScrollToPreferredOption"><b>Auto-scroll</b> directly to 1st preferred train</span>
+            </label>
+            <label class="checkbox-row">
+              <input type="checkbox" id="dimNonPreferredTrains" />
+              <span data-i18n="dimNonPreferredOption"><b>Dim other trains</b> to reduce visual clutter</span>
+            </label>
+            <label class="checkbox-row">
+              <input type="checkbox" id="enableReleaseAlarm" />
+              <span data-i18n="enableReleaseAlarmOption">Notify 2 mins before release (7:58 AM & 1:58 PM BST)</span>
+            </label>
+          </div>
+
+          <div class="shortcut-info-box">
+            <div data-i18n="shortcutsHeading">⌨️ <b>Keyboard Shortcuts:</b></div>
+            <div data-i18n="shortcutPopup">• Open Popup: <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>Q</kbd></div>
+            <div data-i18n="shortcutAutofill">• Quick Autofill: <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Status Toast -->
+    <div id="statusToast" class="status-toast hidden"></div>
+
+    <!-- Sticky Bottom Action Bar -->
+    <footer class="app-footer">
+      <button type="button" id="saveConfigBtn" class="btn-save" data-i18n="saveConfigBtn">
+        💾 Save Config
+      </button>
+      <button type="button" id="autofillNowBtn" class="btn-primary-action" data-i18n="autofillNowBtn">
+        ⚡ Autofill & Search
+      </button>
+    </footer>
+  </div>
+
+  <script src="../utils/i18n.js"></script>
+  <script src="../utils/stations-data.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

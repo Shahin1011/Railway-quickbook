@@ -1,0 +1,67 @@
+{
+  "manifest_version": 3,
+  "name": "Railway QuickBook – BD Railway Assistant",
+  "short_name": "Railway QuickBook",
+  "version": "1.0.0",
+  "description": "বাংলাদেশ রেলওয়ে ই-টিকিট (eticket.railway.gov.bd) বুকিংয়ের জন্য দ্রুত Autofill, পছন্দের ট্রেন হাইলাইট এবং যাত্রার তথ্য সংরক্ষণের স্মার্ট সহকারী।",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "alarms",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://eticket.railway.gov.bd/*",
+    "https://*.railway.gov.bd/*"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Railway QuickBook – ড্যাশবোর্ড খুলুন (Alt+Shift+Q)",
+    "default_icon": {
+      "16": "assets/icon-16.png",
+      "48": "assets/icon-48.png",
+      "128": "assets/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "assets/icon-16.png",
+    "48": "assets/icon-48.png",
+    "128": "assets/icon-128.png"
+  },
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://eticket.railway.gov.bd/*",
+        "https://*.railway.gov.bd/*"
+      ],
+      "css": [
+        "content/content.css"
+      ],
+      "js": [
+        "utils/i18n.js",
+        "utils/stations-data.js",
+        "content/content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+Shift+Q"
+      },
+      "description": "Railway QuickBook পপআপ ড্যাশবোর্ড খুলুন"
+    },
+    "trigger-autofill": {
+      "suggested_key": {
+        "default": "Alt+Shift+F"
+      },
+      "description": "রেলওয়ে পেজে দ্রুত ফর্ম Autofill ও Search করুন"
+    }
+  }
+}
